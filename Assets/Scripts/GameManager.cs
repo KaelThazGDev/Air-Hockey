@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +13,11 @@ public class GameManager : MonoBehaviour
     private bool ballHeadingTowardBot = false;
     private float ballHeadingPoint;
     [SerializeField] private Text WhoWin;
-    [SerializeField] private Text MScore;
     [SerializeField] private GameObject EndGameUI;
+    [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject Bot;
+    [SerializeField] private GameObject Ball;
+    [SerializeField] private GameObject MScore;
 
     private void Awake()
     {
@@ -49,18 +53,18 @@ public class GameManager : MonoBehaviour
             botScore++;
         }
         matchScore = playerScore + " - " + botScore;
-        MScore.text = matchScore;
+        MScore.GetComponent<Text>().text = matchScore;
         if (playerScore == 5)
         {
             WhoWin.text = "You Win !!!";
-            MScore.text = null;
-            Endgame();
+            MScore.GetComponent<Text>().text = null;
+            EndGamePopUp();
         }
         if (botScore ==5)
         {
             WhoWin.text = "You Lose :(";
-            MScore.text = null;
-            Endgame();
+            MScore.GetComponent<Text>().text = null;
+            EndGamePopUp();
         }
     }
     public bool IfBallHeadingTowardBot()
@@ -78,15 +82,32 @@ public class GameManager : MonoBehaviour
     public void SetBallHeadingPoint(float x)
     {
         ballHeadingPoint = x;
-        Debug.Log(x);
     }
     public string MatchScore()
     {
         return matchScore;
     }
 
-    public void Endgame()
+    public void EndGamePopUp()
     {
         EndGameUI.SetActive(true);
+        MScore.SetActive(false);
+    }
+
+    public void NewGame()
+    {
+        matchScore = "0 - 0";
+        playerScore = 0;
+        botScore = 0;
+        Bot.transform.position = new Vector3(0, 8.3f, 0);
+        Player.transform.position = new Vector3(0, -8.3f, 0);
+        Ball.transform.position = new Vector3(0, -6.3f, 0);
+        Ball.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        EndGameUI.SetActive(false);
+        MScore.SetActive(true);
+    }
+    public void ExitGame()
+    {
+        EditorApplication.isPlaying = false;
     }
 }

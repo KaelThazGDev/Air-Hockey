@@ -19,28 +19,29 @@ public class Bot : MonoBehaviour
         ballHeadingPoint = Mathf.Clamp(GameManager.instance.BallHeadingTowardPoint(), LeftBorder, RightBorder);
         if (GameManager.instance.IfBallHeadingTowardBot())
         {
-            if (transform.position.x > ballHeadingPoint)
-            {
-                transform.position -= new Vector3(Velocity * Time.deltaTime, 0, 0);
-            }
-            else
-            {
-                transform.position += new Vector3(Velocity * Time.deltaTime, 0, 0);
-            }
+            //if (transform.position.x > ballHeadingPoint)
+            //{
+            //    transform.position -= new Vector3(Velocity * Time.deltaTime, 0, 0);
+            //}
+            //else
+            //{
+            //    transform.position += new Vector3(Velocity * Time.deltaTime, 0, 0);
+            //}
+            Patrol(ballHeadingPoint - 0.5f, ballHeadingPoint + 0.5f);
         }
         else
         {
-            Patrol();
+            Patrol(LeftBorder,RightBorder);
         }
     }
 
-    private void Patrol()
+    private void Patrol(float leftX, float rightX)
     {
-        if (transform.position.x > RightBorder)
+        if (transform.position.x > rightX)
         {
             movingLeft = true;
         }
-        if (transform.position.x < LeftBorder)
+        if (transform.position.x < leftX)
         {
             movingLeft = false;
         }

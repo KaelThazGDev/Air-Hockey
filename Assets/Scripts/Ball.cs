@@ -11,16 +11,9 @@ public class Ball : MonoBehaviour
     private int bounceTimes = 0;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        Debug.DrawRay(transform.position, transform.GetComponent<Rigidbody2D>().velocity,Color.red);
+        //Debug.DrawRay(transform.position, transform.GetComponent<Rigidbody2D>().velocity,Color.red);
     }
 
 
@@ -50,14 +43,14 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (transform.GetComponent<Rigidbody2D>().velocity.y > 0)
+        
+        if (transform.GetComponent<Rigidbody2D>().velocity.y > 0 )
         {
             GameManager.instance.BallHeadingTowardBot(true);
             bounceTimes = 0;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.GetComponent<Rigidbody2D>().velocity, 50f);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.GetComponent<Rigidbody2D>().velocity);
             if (hit.collider.name == "HitBox")
             {
-                Debug.Log("hit");
                 boxHitted = true;
                 GameManager.instance.SetBallHeadingPoint(hit.point.x);
             }
@@ -96,6 +89,14 @@ public class Ball : MonoBehaviour
 
             transform.GetComponent<Rigidbody2D>().AddForce(new Vector2 (vX,vY), ForceMode2D.Impulse);
             firstForceApplied = true;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(vX, vY));
+            if (hit.collider.name == "HitBox")
+            {
+                GameManager.instance.BallHeadingTowardBot(true);
+                boxHitted = true;
+                GameManager.instance.SetBallHeadingPoint(hit.point.x);
+            }
+
         }
     }
 
