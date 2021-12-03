@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,9 @@ public class GameManager : MonoBehaviour
     private string matchScore = "0 - 0";
     private bool ballHeadingTowardBot = false;
     private float ballHeadingPoint;
-
+    [SerializeField] private Text WhoWin;
+    [SerializeField] private Text MScore;
+    [SerializeField] private GameObject EndGameUI;
 
     private void Awake()
     {
@@ -46,6 +49,19 @@ public class GameManager : MonoBehaviour
             botScore++;
         }
         matchScore = playerScore + " - " + botScore;
+        MScore.text = matchScore;
+        if (playerScore == 5)
+        {
+            WhoWin.text = "You Win !!!";
+            MScore.text = null;
+            Endgame();
+        }
+        if (botScore ==5)
+        {
+            WhoWin.text = "You Lose :(";
+            MScore.text = null;
+            Endgame();
+        }
     }
     public bool IfBallHeadingTowardBot()
     {
@@ -67,5 +83,10 @@ public class GameManager : MonoBehaviour
     public string MatchScore()
     {
         return matchScore;
+    }
+
+    public void Endgame()
+    {
+        EndGameUI.SetActive(true);
     }
 }
